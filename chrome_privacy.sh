@@ -3,40 +3,79 @@
 # Clear existing Chrome data
 adb shell pm clear com.android.chrome
 
-# Enable Do Not Track
-adb shell settings put global privacy_do_not_track_enabled 1
-
-# Disable WebRTC
-adb shell settings put global webview_enable_webrtc 0
-
-# Block third-party cookies
-adb shell settings put global third_party_cookies_enabled 0
-
-# Disable autofill
-adb shell settings put secure autofill_enabled 0
-
-# Disable location sharing
-adb shell settings put global location_settings_enabled 0
-
-# Disable push notifications
-adb shell settings put global pushmessaging_enabled 0
-
-# Block camera and microphone access
-adb shell settings put global camera_disabled 1
-adb shell settings put global microphone_disabled 1
-
-# Block usage data sharing
-adb shell settings put global usage_stats_enabled 0
-
-# Allow first-party cookies only
-adb shell settings put global cookie_setting 1
-
-# Set default browsing mode to incognito
+# Enable Do Not Track for Chrome
 adb shell "echo '
 <map>
-  <entry key=\"browser_mode_incognito\" value=\"true\" />
+  <entry key=\"enable_do_not_track\">true</entry>
 </map>
-' > /data/user_de/0/com.android.chrome/shared_prefs/ChromeSyncPrefs.xml"
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Disable WebRTC for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"webrtc.ip_handling_policy\">disable_non_proxied_udp</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Block third-party cookies for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"profile.content_settings.exceptions.cookies\">{}</entry>
+  <entry key=\"profile.content_settings.exceptions.cookies_for_urls\">[{&quot;pattern&quot;:&quot;[*.]google.com&quot;,&quot;setting&quot;:1}]</entry>
+  <entry key=\"profile.content_settings.pattern_pairs.last_used\">4</entry>
+  <entry key=\"profile.content_settings.pattern_pairs.4.pattern\">[*.]google.com</entry>
+  <entry key=\"profile.content_settings.pattern_pairs.4.setting\">1</entry>
+  <entry key=\"profile.default_content_setting_values.cookies\">2</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Disable autofill for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"autofill_enabled\">false</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Disable location sharing for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"geolocation\">{}</entry>
+  <entry key=\"profile.content_settings.exceptions.geolocation\">{}</entry>
+  <entry key=\"profile.content_settings.exceptions.geolocation_for_urls\">[]</entry>
+  <entry key=\"profile.default_content_setting_values.geolocation\">2</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Disable push notifications for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"push_messaging_blocked\">true</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Block camera and microphone access for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"profile.content_settings.exceptions.media_stream_camera\">{}</entry>
+  <entry key=\"profile.content_settings.exceptions.media_stream_camera_for_urls\">[]</entry>
+  <entry key=\"profile.content_settings.exceptions.media_stream_mic\">{}</entry>
+  <entry key=\"profile.content_settings.exceptions.media_stream_mic_for_urls\">[]</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Allow first-party cookies only for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"profile.default_content_setting_values.cookies\">1</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
+
+# Set default browsing mode to incognito for Chrome
+adb shell "echo '
+<map>
+  <entry key=\"incognito_mode_availability\">1</entry>
+</map>
+' > /data/data/com.android.chrome/app_chrome/Default/Preferences"
 
 # Restart Chrome
 adb shell am force-stop com.android.chrome
