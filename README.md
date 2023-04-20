@@ -37,3 +37,7 @@ You can modify the script to enable/disable specific privacy options or add new 
 
 ## Disclaimer
 This script is provided as-is and without warranty. Use at your own risk. The author is not responsible for any damages or privacy violations that may result from using this script.
+
+## License
+
+This script is released under the [MIT License](LICENSE).
